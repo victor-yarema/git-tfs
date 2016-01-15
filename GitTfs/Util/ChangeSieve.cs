@@ -38,6 +38,7 @@ namespace Sep.Git.Tfs.Util
 
         public ChangeSieve(IChangeset changeset, PathResolver resolver)
         {
+            //System.Diagnostics.Debugger.Launch();
             _resolver = resolver;
 
             _namedChanges = changeset.Changes.Select(c => new NamedChange
@@ -117,6 +118,14 @@ namespace Sep.Git.Tfs.Util
                         // for get changes only on first change set
                         forceGetChanges = false;
 
+                        if (change == null)
+                        {
+                            throw new Exception("(change == null)");
+                        }
+                        if (change.Info == null)
+                        {
+                            throw new Exception("(change.Info == null)");
+                        }
                         compartments.Updated.Add(ApplicableChange.Update(change.GitPath, change.Info.Mode));
                     }
                 }
