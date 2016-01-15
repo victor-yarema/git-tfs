@@ -30,6 +30,15 @@ namespace Sep.Git.Tfs
 
         public static int MainCore(string[] args)
         {
+            for (var i = 0; i < args.Length; i++)
+            {
+                var curArg = args[i];
+                if (curArg.StartsWith("$//"))
+                {
+                    args[i] = curArg.Replace("$//", "$/");
+                }
+            }
+
             var container = Initialize();
             return container.GetInstance<GitTfs>().Run(new List<string>(args));
         }
