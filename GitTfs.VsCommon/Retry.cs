@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading;
 using Sep.Git.Tfs.Core;
 
@@ -39,18 +40,18 @@ namespace Sep.Git.Tfs.VsCommon
                 catch (Microsoft.TeamFoundation.TeamFoundationServerException ex)
                 {
                     exceptions.Add(ex);
-                    Thread.Sleep(retryInterval);
                 }
                 catch (System.Net.WebException ex)
                 {
                     exceptions.Add(ex);
-                    Thread.Sleep(retryInterval);
                 }
                 catch (GitTfsException ex) // allows continue of catch (MappingConflictException e) throw as innerexception
                 {
                     exceptions.Add(ex);
-                    Thread.Sleep(retryInterval);
                 }
+
+                Trace.WriteLine(string.Format("Try {0} of {1} failed. Retry after {2} seconds.", retry, retryCount, retryInterval.TotalSeconds));
+                Thread.Sleep(retryInterval);
             }
 
             throw new AggregateException(exceptions);
